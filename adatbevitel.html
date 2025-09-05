@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <title>Adatbekérés LocalStorage-al</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 300px;
+    }
+
+    .container label {
+      font-weight: bold;
+    }
+
+    .container input {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+
+    button {
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button.save {
+      background: #4CAF50;
+      color: white;
+    }
+
+    button.delete {
+      background: #f44336;
+      color: white;
+    }
+
+    .display {
+      margin-top: 20px;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      min-width: 300px;
+    }
+
+    .display p {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Adatbekérés</h1>
+
+  <div class="container">
+    <label for="nev">Név:</label>
+    <input type="text" id="nev">
+    
+    <label for="telepules">Település:</label>
+    <input type="text" id="telepules">
+    
+    <label for="iranyitoszam">Irányítószám:</label>
+    <input type="text" id="iranyitoszam">
+    
+    <label for="kozterulet">Közterület:</label>
+    <input type="text" id="kozterulet">
+    
+    <label for="hazszam">Házszám:</label>
+    <input type="text" id="hazszam">
+
+    <div class="buttons">
+      <button class="save" onclick="mentes()">Mentés</button>
+      <button class="delete" onclick="torles()">Törlés</button>
+    </div>
+  </div>
+
+  <div class="display" id="adatMegjelenites">
+  </div>
+
+  <script>
+    function megjelenitAdatok() {
+      const adatok = JSON.parse(localStorage.getItem('userData'));
+      const displayDiv = document.getElementById('adatMegjelenites');
+      displayDiv.innerHTML = '';
+
+      if (!adatok) {
+        displayDiv.innerHTML = '<p>Nincs adat (NA)</p>';
+      } else {
+        displayDiv.innerHTML = `
+          <p><strong>Név:</strong> ${adatok.nev}</p>
+          <p><strong>Település:</strong> ${adatok.telepules}</p>
+          <p><strong>Irányítószám:</strong> ${adatok.iranyitoszam}</p>
+          <p><strong>Közterület:</strong> ${adatok.kozterulet}</p>
+          <p><strong>Házszám:</strong> ${adatok.hazszam}</p>
+        `;
+      }
+    }
+
+    function mentes() {
+      const nev = document.getElementById('nev').value || '-';
+      const telepules = document.getElementById('telepules').value || '-';
+      const iranyitoszam = document.getElementById('iranyitoszam').value || '-';
+      const kozterulet = document.getElementById('kozterulet').value || '-';
+      const hazszam = document.getElementById('hazszam').value || '-';
+
+      const adatok = {
+        nev,
+        telepules,
+        iranyitoszam,
+        kozterulet,
+        hazszam
+      };
+
+      localStorage.setItem('userData', JSON.stringify(adatok));
+      megjelenitAdatok();
+    }
+
+    function torles() {
+      localStorage.removeItem('userData');
+      megjelenitAdatok();
+    }
+
+    megjelenitAdatok();
+  </script>
+</body>
+</html>
